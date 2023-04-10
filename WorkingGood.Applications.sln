@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.WebApi", "Src\WorkingGood.WebApi\WorkingGood.WebApi.csproj", "{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.Domain", "Src\WorkingGood.Domain\WorkingGood.Domain.csproj", "{52239566-0960-4C20-A462-F9987E7A50EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.Infrastructure", "Src\WorkingGood.Infrastructure\WorkingGood.Infrastructure.csproj", "{066CB986-1AA3-4D99-8150-3E892B8C583F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52239566-0960-4C20-A462-F9987E7A50EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52239566-0960-4C20-A462-F9987E7A50EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52239566-0960-4C20-A462-F9987E7A50EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52239566-0960-4C20-A462-F9987E7A50EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
+		{52239566-0960-4C20-A462-F9987E7A50EA} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
+		{066CB986-1AA3-4D99-8150-3E892B8C583F} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
+	EndGlobalSection
+EndGlobal
