@@ -1,7 +1,9 @@
-﻿using System.Text;
-using Microsoft.AspNetCore.Mvc;
+﻿ using System.Text;
+ using Amazon.Auth.AccessControlPolicy;
+ using Microsoft.AspNetCore.Mvc;
 using WorkingGood.Domain.Interfaces;
-using WorkingGood.Domain.Models;
+ using WorkingGood.Domain.Interfaces.Valida;
+ using WorkingGood.Domain.Models;
 using WorkingGood.Infrastructure.Common.Extensions;
 using WorkingGood.WebApi.DTOs;
 
@@ -23,17 +25,27 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("Api/Applications/Add",async ([FromBody]ApplicationDto applicationDto, IApplicationRepository applicationRepository) =>
+app.MapPost("Api/Applications/Add",async ([FromBody]ApplicationDto applicationDto, 
+    IApplicationRepository applicationRepository,
+    IOfferChecker offerChecker) =>
 {
-    byte[] byteDocument = Convert.FromBase64String(applicationDto.Document!);
-    Application application = new(
-        applicationDto.CandidateFirstName!,
-        applicationDto.CandidateLastName!,
-        applicationDto.CandidateEmail!,
-        applicationDto.Description!,
-        byteDocument
+    if (await offerChecker.CheckOfferStatus((Guid) applicationDto.OfferId))
+    {
+        //SGVsbG8=
+        byte[] byteDocument = Convert.FromBase64String(applicationDto.Document!);
+        Application application = new(
+            applicationDto.CandidateFirstName!,
+            applicationDto.CandidateLastName!,
+            applicationDto.CandidateEmail!,
+            applicationDto.Description!,
+            byteDocument
         );
-    await applicationRepository.AddAsync(application);
+        await applicationRepository.AddAsync(application);
+    }
+    else
+    {
+        Results.BadRequest("Offer status is not valid");
+    }
 });
 app.Run();
 

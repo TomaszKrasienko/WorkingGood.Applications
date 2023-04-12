@@ -8,6 +8,7 @@ namespace WorkingGood.WebApi.DTOs
         public string? CandidateEmail { get; set; }
         public string? Description { get; set; }
         public string? Document { get; set; }
+        public Guid? OfferId { get; set; }
     }
 }
 

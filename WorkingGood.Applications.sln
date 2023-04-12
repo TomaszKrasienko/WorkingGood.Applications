@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.Domain", "Src\W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.Infrastructure", "Src\WorkingGood.Infrastructure\WorkingGood.Infrastructure.csproj", "{066CB986-1AA3-4D99-8150-3E892B8C583F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9348F22C-4847-4B1C-948E-E30471177ECE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.Domain.Tests", "Tests\WorkingGood.Domain.Tests\WorkingGood.Domain.Tests.csproj", "{610C1A1B-2827-4573-AAB7-6877EBF9E751}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkingGood.IntegrationTests", "Tests\WorkingGood.IntegrationTests\WorkingGood.IntegrationTests.csproj", "{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,10 +33,20 @@ Global
 		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{066CB986-1AA3-4D99-8150-3E892B8C583F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{610C1A1B-2827-4573-AAB7-6877EBF9E751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{610C1A1B-2827-4573-AAB7-6877EBF9E751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{610C1A1B-2827-4573-AAB7-6877EBF9E751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{610C1A1B-2827-4573-AAB7-6877EBF9E751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BF1D8E18-5562-4FBA-9D95-EAD0D42C0B90} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
 		{52239566-0960-4C20-A462-F9987E7A50EA} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
 		{066CB986-1AA3-4D99-8150-3E892B8C583F} = {65B9C31F-8014-40C8-A5FE-F7EC691C1DBD}
+		{610C1A1B-2827-4573-AAB7-6877EBF9E751} = {9348F22C-4847-4B1C-948E-E30471177ECE}
+		{2C56BC4F-6710-4A1A-A9C4-71EF8A9ECF36} = {9348F22C-4847-4B1C-948E-E30471177ECE}
 	EndGlobalSection
 EndGlobal

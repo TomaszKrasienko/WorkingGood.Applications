@@ -11,11 +11,15 @@
     <None Remove="ValueObjects\" />
     <None Remove="Interfaces\" />
     <None Remove="Exceptions\" />
+    <None Remove="Interfaces\Repositories\" />
+    <None Remove="Interfaces\Valida\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
     <Folder Include="ValueObjects\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Interfaces\Repositories\" />
+    <Folder Include="Interfaces\Validation\" />
   </ItemGroup>
 </Project>
