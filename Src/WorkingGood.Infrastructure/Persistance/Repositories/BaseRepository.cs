@@ -1,28 +1,47 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 using WorkingGood.Domain.Interfaces;
+using WorkingGood.Domain.Models;
 using WorkingGood.Infrastructure.Common.ConfigModels;
 
 namespace WorkingGood.Infrastructure.Persistance.Repositories
 {
-    public class BaseRepository<T> : IRepository<T>
+    public abstract class BaseRepository<T> : IRepository<T> where T : Entity
     {
-        private readonly ILogger<BaseRepository<T>> _logger;
-        private readonly IMongoDbContext _mongoDbContext;
-        private readonly MongoDbConfig _mongoDbConfig;
-        public BaseRepository(ILogger<BaseRepository<T>> logger, IMongoDbContext mongoDbContext, MongoDbConfig mongoDbConfig)
+        protected readonly ILogger<BaseRepository<T>> Logger;
+        protected readonly IMongoDbContext MongoDbContext;
+        protected readonly MongoDbConfig MongoDbConfig;
+        protected BaseRepository(ILogger<BaseRepository<T>> logger, IMongoDbContext mongoDbContext, MongoDbConfig mongoDbConfig)
         {
-            _logger = logger;
-            _mongoDbContext = mongoDbContext;
-            _mongoDbConfig = mongoDbConfig;
+            Logger = logger;
+            MongoDbContext = mongoDbContext;
+            MongoDbConfig = mongoDbConfig;
         }
         public async Task<T> AddAsync(T entity)
         {
-            _logger.LogInformation($"Adding {typeof(T)} to databse");
-            var db = _mongoDbContext.GetDatabase();
-            var collection = db.GetCollection<T>(_mongoDbConfig.Database);
+            Logger.LogInformation($"Adding {typeof(T)} to database");
+            var db = MongoDbContext.GetDatabase();
+            var collection = db.GetCollection<T>(MongoDbConfig.Database);
             await collection.InsertOneAsync(entity);
             return entity;
+        }
+        public async Task<T> GetByIdAsync(Guid id)
+        {
+            Logger.LogInformation($"Getting Application by {id}");
+            var db = MongoDbContext.GetDatabase();
+            var collection = db.GetCollection<T>(MongoDbConfig.Database);
+            var filter = Builders<T>.Filter.Eq("_id", id);
+            var entity = await collection.Find<T>(filter).FirstOrDefaultAsync();
+            return entity;
+        }
+        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> includeProperties)
+        {
+            var db = MongoDbContext.GetDatabase();
+            var collection = db.GetCollection<T>(MongoDbConfig.Database);
+            var entities = await collection.FindAsync(includeProperties);
+            return await entities.ToListAsync();
         }
     }
 }

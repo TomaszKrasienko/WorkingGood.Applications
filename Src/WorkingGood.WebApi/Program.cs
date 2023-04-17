@@ -1,51 +1,89 @@
-﻿ using System.Text;
- using Amazon.Auth.AccessControlPolicy;
- using Microsoft.AspNetCore.Mvc;
-using WorkingGood.Domain.Interfaces;
+﻿ using Microsoft.AspNetCore.Mvc;
+ using Newtonsoft.Json;
+ using NLog;
+ using NLog.Web;
+ using WorkingGood.Domain.Enums;
+ using WorkingGood.Domain.Interfaces;
+ using WorkingGood.Domain.Interfaces.Communication;
  using WorkingGood.Domain.Interfaces.Valida;
  using WorkingGood.Domain.Models;
-using WorkingGood.Infrastructure.Common.Extensions;
-using WorkingGood.WebApi.DTOs;
+ using WorkingGood.Infrastructure.Common.ConfigModels;
+ using WorkingGood.Infrastructure.Common.Extensions;
+ using WorkingGood.Infrastructure.Communication.Entities;
+ using WorkingGood.WebApi.DTOs;
+ 
+ Logger logger = LogManager.GetLogger("RmqTarget");
+ try
+ {
+     var builder = WebApplication.CreateBuilder(args);
+     builder.Services.AddEndpointsApiExplorer();
+     builder.Services.AddSwaggerGen();
+     builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+     builder.Host.UseNLog();
+     var app = builder.Build();
+     if (app.Environment.IsDevelopment())
+     {
+         app.UseSwagger();
+         app.UseSwaggerUI();
+     }
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.ConfigureInfrastructureServices(builder.Configuration);
-var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.MapPost("Api/Applications/Add",async ([FromBody]ApplicationDto applicationDto, 
-    IApplicationRepository applicationRepository,
-    IOfferChecker offerChecker) =>
-{
-    if (await offerChecker.CheckOfferStatus((Guid) applicationDto.OfferId))
-    {
-        //SGVsbG8=
-        byte[] byteDocument = Convert.FromBase64String(applicationDto.Document!);
-        Application application = new(
-            applicationDto.CandidateFirstName!,
-            applicationDto.CandidateLastName!,
-            applicationDto.CandidateEmail!,
-            applicationDto.Description!,
-            byteDocument
-        );
-        await applicationRepository.AddAsync(application);
-    }
-    else
-    {
-        Results.BadRequest("Offer status is not valid");
-    }
-});
-app.Run();
+     app.UseHttpsRedirection();
+     app.MapPost("api/applications/add", async ([FromBody] ApplicationDto applicationDto,
+         IApplicationRepository applicationRepository,
+         IOfferChecker offerChecker,
+         IRabbitManager rabbitManager,
+         BrokerConfig brokerConfig) =>
+     {
+         if (await offerChecker.CheckOfferStatus((Guid) applicationDto.OfferId!))
+         {
+             //SGVsbG8=
+             byte[] byteDocument = Convert.FromBase64String(applicationDto.Document!);
+             Application application = new(
+                 applicationDto.CandidateFirstName!,
+                 applicationDto.CandidateLastName!,
+                 applicationDto.CandidateEmail!,
+                 applicationDto.Description!,
+                 byteDocument,
+                 (Guid) applicationDto.OfferId
+             );
+             await applicationRepository.AddAsync(application);
+             RabbitMqRoutesConfig routingConfig = brokerConfig.SendingRoutes.SingleOrDefault(x =>
+                 x.Destination == MessageDestinations.ApplicationConfirmation.ToString())!;
+             await rabbitManager.Send(
+                 JsonConvert.SerializeObject(new ApplicationConfirmation()
+                 {
+                     Email = applicationDto.CandidateEmail!
+                 }),
+                 routingConfig!.Exchange,
+                 routingConfig.RoutingKey
+             );
+             return Results.Ok(application);
+         }
+         else
+         {
+             return Results.BadRequest("Offer status is not valid");
+         }
+     });
+     app.MapGet("api/applications/getById/{id}", async ([FromQuery] Guid id,
+         IApplicationRepository applicationRepository) =>
+     {
+         var application = await applicationRepository.GetByIdAsync(id);
+         return Results.Ok(application);
+     });
+     app.MapGet("api/applications/getByOfferId/{offerId}", async ([FromQuery] Guid offerId,
+         IApplicationRepository applicationRepository) =>
+     {
+         var applicationsList = await applicationRepository.GetAllAsync(x => x.OfferId == offerId);
+         return Results.Ok(applicationsList);
+     });
+     app.Run();
+ }
+ catch (Exception ex)
+ {
+     logger.Error(ex);
+ }
+ finally
+ {
+     
+ }
 
