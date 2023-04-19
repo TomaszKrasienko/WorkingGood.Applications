@@ -8,7 +8,23 @@ public static class WebApiConfiguration
     {
         services
             .AddInfrastructureConfiguration(configuration)
-            .ConfigureSwagger();
+            .ConfigureSwagger()
+            .AddCorsPolicy();
+        return services;
+    }
+    private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy(Common.Statics.ConfigurationConst.CORS_POLICY_NAME, builder =>
+            {
+                builder
+                    .SetIsOriginAllowed(_ => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials();
+            });
+        });
         return services;
     }
 }
