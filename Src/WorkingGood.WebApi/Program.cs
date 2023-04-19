@@ -31,12 +31,14 @@
      });
      app.UseHttpsRedirection();
      app.UseCors(ConfigurationConst.CORS_POLICY_NAME);
-     app.MapPost("api/applications/add", async ([FromBody] ApplicationDto applicationDto,
+     app.AddCustomMiddlewares();
+     app.MapPost("applications/add", async ([FromBody] ApplicationDto applicationDto,
          IApplicationRepository applicationRepository,
          IOfferChecker offerChecker,
          IRabbitManager rabbitManager,
          BrokerConfig brokerConfig) =>
      {
+         logger.Info("Handling applications/add");
          if (await offerChecker.CheckOfferStatus((Guid) applicationDto.OfferId!))
          {
              //SGVsbG8=
@@ -67,15 +69,17 @@
              return Results.BadRequest("Offer status is not valid");
          }
      });
-     app.MapGet("api/applications/getById/{id}", async ([FromQuery] Guid id,
+     app.MapGet("applications/getById/{id}", async ([FromQuery] Guid id,
          IApplicationRepository applicationRepository) =>
      {
+         logger.Info("Handling applications/getById");
          var application = await applicationRepository.GetByIdAsync(id);
          return Results.Ok(application);
      });
-     app.MapGet("api/applications/getByOfferId/{offerId}", async ([FromQuery] Guid offerId,
+     app.MapGet("applications/getByOfferId/{offerId}", async ([FromQuery] Guid offerId,
          IApplicationRepository applicationRepository) =>
      {
+         logger.Info("Handling applications/getByOfferId");
          var applicationsList = await applicationRepository.GetAllAsync(x => x.OfferId == offerId);
          return Results.Ok(applicationsList);
      });
