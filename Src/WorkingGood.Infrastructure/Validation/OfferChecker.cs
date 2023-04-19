@@ -21,7 +21,7 @@ namespace WorkingGood.Infrastructure.Validation
 			try
 			{
 				var httpClient = _httpClientFactory.CreateClient(HttpClients.OffersClient);
-				var response = await httpClient.GetAsync($"api/Offers/GetOfferStatus/{offerId}");
+				var response = await httpClient.GetAsync($"offers/getOfferStatus/{offerId}");
 				if (response.IsSuccessStatusCode)
 				{
 					string content = await response.Content.ReadAsStringAsync();

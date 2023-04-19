@@ -8,7 +8,6 @@
  using WorkingGood.Domain.Interfaces.Valida;
  using WorkingGood.Domain.Models;
  using WorkingGood.Infrastructure.Common.ConfigModels;
- using WorkingGood.Infrastructure.Common.Extensions;
  using WorkingGood.Infrastructure.Communication.Entities;
  using WorkingGood.WebApi.Common.Extensions.Configuration;
  using WorkingGood.WebApi.Common.Statics;
