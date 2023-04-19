@@ -18,7 +18,7 @@ namespace WorkingGood.Infrastructure.Common.Extensions
 {
 	public static class InfrastructureConfiguration
 	{
-		public static IServiceCollection ConfigureInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+		public static IServiceCollection AddInfrastructureConfiguration(this IServiceCollection services, IConfiguration configuration)
 		{
 			services
 				.AddServices()

@@ -12,10 +12,9 @@
     "WorkingGood.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "swagger",
       "applicationUrl": "https://localhost:7178;http://localhost:5087",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Local"
       },
       "dotnetRunMessages": true
     },

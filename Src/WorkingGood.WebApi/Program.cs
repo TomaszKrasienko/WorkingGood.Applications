@@ -10,6 +10,8 @@
  using WorkingGood.Infrastructure.Common.ConfigModels;
  using WorkingGood.Infrastructure.Common.Extensions;
  using WorkingGood.Infrastructure.Communication.Entities;
+ using WorkingGood.WebApi.Common.Extensions.Configuration;
+ using WorkingGood.WebApi.Common.Statics;
  using WorkingGood.WebApi.DTOs;
  
  Logger logger = LogManager.GetLogger("RmqTarget");
@@ -18,16 +20,17 @@
      var builder = WebApplication.CreateBuilder(args);
      builder.Services.AddEndpointsApiExplorer();
      builder.Services.AddSwaggerGen();
-     builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+     builder.Services.AddConfiguration(builder.Configuration);
      builder.Host.UseNLog();
      var app = builder.Build();
-     if (app.Environment.IsDevelopment())
+     app.UseSwagger(); 
+     app.UseSwaggerUI(options =>
      {
-         app.UseSwagger();
-         app.UseSwaggerUI();
-     }
-
+         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+         options.RoutePrefix = string.Empty;
+     });
      app.UseHttpsRedirection();
+     app.UseCors(ConfigurationConst.CORS_POLICY_NAME);
      app.MapPost("api/applications/add", async ([FromBody] ApplicationDto applicationDto,
          IApplicationRepository applicationRepository,
          IOfferChecker offerChecker,
