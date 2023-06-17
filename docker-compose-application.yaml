@@ -2,6 +2,7 @@ version: '3.7'
 services:
   applications:
     container_name: working-good-applications
+    build: ./
     ports: 
       - 30011:80
     environment:
