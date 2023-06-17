@@ -4,14 +4,15 @@ using WorkingGood.Domain.Interfaces.Valida;
 using WorkingGood.Infrastructure.Common.Extensions;
 using WorkingGood.Infrastructure.Common.Statics;
 using WorkingGood.Infrastructure.Communication.Entities;
+using WorkingGood.Log;
 
 namespace WorkingGood.Infrastructure.Validation
 {
 	public class OfferChecker : IOfferChecker
 	{
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger<OfferChecker> _logger;
-		public OfferChecker(ILogger<OfferChecker> logger, IHttpClientFactory httpClientFactory)
+        private readonly IWgLog<OfferChecker> _logger;
+		public OfferChecker(IWgLog<OfferChecker> logger, IHttpClientFactory httpClientFactory)
 		{
 			_logger = logger;
 			_httpClientFactory = httpClientFactory;
@@ -34,7 +35,7 @@ namespace WorkingGood.Infrastructure.Validation
 			}
 			catch (HttpRequestException ex)
 			{
-				_logger.LogError(ex.Message, ex);
+				_logger.Error(ex);
 				return false;
 			}
 		}

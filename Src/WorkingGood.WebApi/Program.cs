@@ -8,18 +8,21 @@
  using WorkingGood.Domain.Models;
  using WorkingGood.Infrastructure.Common.ConfigModels;
  using WorkingGood.Infrastructure.Communication.Entities;
+ using WorkingGood.Log;
+ using WorkingGood.Log.Configuration;
  using WorkingGood.WebApi.Common.Extensions.Configuration;
  using WorkingGood.WebApi.Common.Statics;
  using WorkingGood.WebApi.DTOs;
  using WorkingGood.WebApi.ViewModels;
 
- Logger logger = LogManager.GetLogger("RmqTarget");
+ var builder = WebApplication.CreateBuilder(args);
+ var logger = WgLogger.CreateInstance(builder.Configuration);
  try
  {
-     var builder = WebApplication.CreateBuilder(args);
      builder.Services.AddEndpointsApiExplorer();
      builder.Services.AddSwaggerGen();
      builder.Services.AddConfiguration(builder.Configuration);
+     builder.Services.UseWgLog(builder.Configuration, "WorkingGood.Applications");
      var app = builder.Build();
      app.UseSwagger(); 
      app.UseSwaggerUI(options =>
@@ -82,10 +85,14 @@
              await applicationRepository.AddAsync(application);
              RabbitMqRoutesConfig routingConfig = brokerConfig.SendingRoutes.SingleOrDefault(x =>
                  x.Destination == MessageDestinations.ApplicationConfirmation.ToString())!;
+             logger.Info("Sending confirmation message to broker");
              await rabbitManager.Send(
                  JsonConvert.SerializeObject(new ApplicationConfirmation()
                  {
-                     Email = applicationDto.CandidateEmail!
+                     CandidateFirstName = applicationDto.CandidateFirstName!,
+                     CandidateLastName = applicationDto.CandidateLastName!,
+                     CandidateEmail = applicationDto.CandidateEmail!,
+                     OfferId = (Guid)applicationDto.OfferId
                  }),
                  routingConfig!.Exchange,
                  routingConfig.RoutingKey
@@ -109,9 +116,5 @@
  catch (Exception ex)
  {
      logger.Error(ex);
- }
- finally
- {
-     
  }
 

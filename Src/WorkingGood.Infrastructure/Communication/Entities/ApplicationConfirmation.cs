@@ -1,6 +1,9 @@
 namespace WorkingGood.Infrastructure.Communication.Entities;
 
-public class ApplicationConfirmation
+public record ApplicationConfirmation
 {
-    public string Email { get; set; } = string.Empty;
+    public string CandidateEmail { get; init; } = string.Empty;
+    public string CandidateFirstName { get; init; } = string.Empty;
+    public string CandidateLastName { get; init; } = string.Empty;
+    public Guid OfferId { get; init; } 
 }
