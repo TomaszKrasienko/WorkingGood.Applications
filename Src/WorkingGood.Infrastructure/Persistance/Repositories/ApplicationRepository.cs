@@ -13,6 +13,14 @@ namespace WorkingGood.Infrastructure.Persistance.Repositories
             IMongoDbContext mongoDbContext, 
             MongoDbConfig mongoDbConfig) : base(logger, mongoDbContext, mongoDbConfig)
         { }
+
+        public async Task DeleteForOfferAsync(Guid offerId)
+        {
+            Logger.LogInformation($"Deleting all applications for offer with id {offerId}");
+            var db = MongoDbContext.GetDatabase();
+            var collection = db.GetCollection<Application>(MongoDbConfig.Database);
+            await collection.DeleteManyAsync(x => x.OfferId == offerId);
+        }
     }
 }
 

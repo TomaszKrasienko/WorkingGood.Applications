@@ -8,12 +8,12 @@ namespace WorkingGood.Infrastructure.Communication.Broker;
 public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
 {
     private readonly ILogger<RabbitModelPooledObjectPolicy> _logger;
-    private readonly BrokerConfig _brokerConfig;
+    private readonly RabbitMqConfig _rabbitMqConfig;
     private readonly IConnection? _connection;
-    public RabbitModelPooledObjectPolicy(ILogger<RabbitModelPooledObjectPolicy> logger, BrokerConfig brokerConfig)
+    public RabbitModelPooledObjectPolicy(ILogger<RabbitModelPooledObjectPolicy> logger, RabbitMqConfig rabbitMqConfig)
     {
         _logger = logger;
-        _brokerConfig = brokerConfig;
+        _rabbitMqConfig = rabbitMqConfig;
         try
         {
             _connection = GetConnection();
@@ -28,11 +28,11 @@ public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
     private IConnection GetConnection()
     {
         ConnectionFactory connection = new ConnectionFactory();
-        connection.HostName = _brokerConfig.Host;
-        connection.UserName = _brokerConfig.UserName;
-        connection.Password = _brokerConfig.Password;
-        if(_brokerConfig.Port != null)
-            connection.Port = (int)_brokerConfig.Port;
+        connection.HostName = _rabbitMqConfig.Host;
+        connection.UserName = _rabbitMqConfig.UserName;
+        connection.Password = _rabbitMqConfig.Password;
+        if(_rabbitMqConfig.Port != null)
+            connection.Port = (int)_rabbitMqConfig.Port;
         return connection.CreateConnection();
     }
     public IModel Create()

@@ -18,6 +18,7 @@
     <None Remove="Communication\Entities\" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Communication\Broker\Services" />
     <Folder Include="Persistance\" />
     <Folder Include="Common\" />
     <Folder Include="Common\Extensions\" />
@@ -39,6 +40,7 @@
     <PackageReference Include="Polly" Version="7.2.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
+    <PackageReference Include="WorkingGood.Log" Version="1.0.0.5" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WorkingGood.Domain\WorkingGood.Domain.csproj" />

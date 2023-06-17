@@ -40,9 +40,9 @@ namespace WorkingGood.Infrastructure.Common.Extensions
 			MongoDbConfig mongoDbConfig = new();
 			configuration.Bind("MongoDbConnection", mongoDbConfig);
 			services.AddSingleton(mongoDbConfig);
-			BrokerConfig brokerConfig = new();
-			configuration.Bind("RabbitMq", brokerConfig);
-			services.AddSingleton(brokerConfig);
+			RabbitMqConfig rabbitMqConfig = new();
+			configuration.Bind("RabbitMq", rabbitMqConfig);
+			services.AddSingleton(rabbitMqConfig);
 			return services;
 		}
 		private static IServiceCollection AddHttpClient(this IServiceCollection services, IConfiguration configuration)
@@ -50,7 +50,8 @@ namespace WorkingGood.Infrastructure.Common.Extensions
 			var retryPolicy = Policy.HandleResult<HttpResponseMessage>(
 				r => !r.IsSuccessStatusCode)
 				.RetryAsync(3);
-			string offersClientAddress = configuration.GetValue<string>("OffersClientAddress") ?? throw new Exception();
+            //Todo: Przerobić na configuration exception -> coś takiego 
+            string offersClientAddress = configuration.GetValue<string>("OffersClientAddress") ?? throw new Exception();
 			services.AddHttpClient(HttpClients.OffersClient, client =>
 			{
 				client.BaseAddress = new Uri(offersClientAddress);

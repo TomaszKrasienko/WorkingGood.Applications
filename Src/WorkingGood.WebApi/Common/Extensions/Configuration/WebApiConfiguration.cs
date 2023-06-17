@@ -9,7 +9,8 @@ public static class WebApiConfiguration
         services
             .AddInfrastructureConfiguration(configuration)
             .ConfigureSwagger()
-            .AddCorsPolicy();
+            .AddCorsPolicy()
+            .SetAutoMapper();
         return services;
     }
     private static IServiceCollection AddCorsPolicy(this IServiceCollection services)
@@ -26,5 +27,10 @@ public static class WebApiConfiguration
             });
         });
         return services;
+    }
+    private static IServiceCollection SetAutoMapper(this IServiceCollection services)
+    {
+        return services
+            .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
     }
 }

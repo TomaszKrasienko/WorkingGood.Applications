@@ -5,6 +5,7 @@ namespace WorkingGood.Domain.Interfaces
 {
 	public interface IApplicationRepository : IRepository<Application>
 	{
+		Task DeleteForOfferAsync(Guid offerId);
 	}
 }
 
