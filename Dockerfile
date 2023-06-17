@@ -3,7 +3,7 @@ WORKDIR /app
 COPY Src/WorkingGood.Domain/WorkingGood.Domain.csproj ./Domain/
 COPY Src/WorkingGood.Infrastructure/WorkingGood.Infrastructure.csproj ./Infrastructure/
 COPY Src/WorkingGood.WebApi/WorkingGood.WebApi.csproj ./WebApi/
-RUN dotnet restore ./WebApi/WorkingGood.WebApi.csproj
+RUN dotnet restore ./WebApi/WorkingGood.WebApi.csproj -s https://api.nuget.org/v3/index.json -s http://host.docker.internal:5555/v3/index.json
 COPY . ./
 RUN dotnet publish ./WorkingGood.Applications.sln -c Release -o out
 
